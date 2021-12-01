@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/ksrichard/easyraft/raw/main/logo.png" width="300">
+<img src="https://github.com/ksrichard/easyraft/raw/main/logo.png" width="50%">
 </p>
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/ksrichard/easyraft)](https://goreportcard.com/report/github.com/ksrichard/easyraft)
