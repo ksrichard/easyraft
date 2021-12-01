@@ -1,0 +1,96 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: webkvs-cluster-role
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+      - pods
+      - nodes
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: webkvs-cluster-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: webkvs-cluster-role
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webkvs-raft
+  labels:
+    app: webkvs
+    svcType: easyraft
+spec:
+  ports:
+    - port: 5000
+      name: raft
+  selector:
+    app: webkvs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webkvs-web
+  labels:
+    app: webkvs
+spec:
+  ports:
+    - port: 5001
+      name: client
+  selector:
+    app: webkvs
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webkvs
+spec:
+  selector:
+    matchLabels:
+      app: webkvs
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: webkvs
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: webkvs
+          image: webkvs:latest
+          imagePullPolicy: Never
+          env:
+            - name: DATA_DIR
+              value: "/data/webkvs"
+            - name: EASYRAFT_PORT
+              value: "5000"
+            - name: HTTP_PORT
+              value: "5001"
+            - name: DISCOVERY_PORT
+              value: "5002"
+          ports:
+            - containerPort: 5000
+              name: raft
+            - containerPort: 5001
+              name: client
+            - containerPort: 5002
+              name: discovery
+          volumeMounts:
+            - name: data
+              mountPath: /data

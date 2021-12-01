@@ -20,6 +20,7 @@ Features
         1. **Static Discovery** (having a fixed list of nodes addresses)
         2. **mDNS Discovery** for local network node discovery
         3. **Kubernetes discovery**
+- **Cloud Native** because of kubernetes discovery and easy to load balance features
 - **Automatic forward to leader** - you can contact any node to perform operations, everything will be forwarded to the
   actual leader node
 - **Node monitoring/removal** - the nodes are monitoring each other and if there are some failures then the offline
@@ -71,6 +72,11 @@ func main() {
     defer node.Stop()
 }
 ```
+
+Examples
+---
+Examples can be found in the [examples](https://github.com/ksrichard/easyraft/tree/main/examples/) directory
+
 
 TODO
 ---
