@@ -44,6 +44,7 @@ type Node struct {
 	snapshotEnabled  bool
 }
 
+// NewNode returns an EasyRaft node
 func NewNode(raftPort, discoveryPort int, dataDir string, services []fsm.FSMService, serializer serializer.Serializer, discoveryMethod discovery.DiscoveryMethod, snapshotEnabled bool) (*Node, error) {
 	// default raft config
 	addr := fmt.Sprintf("%s:%d", "0.0.0.0", raftPort)
@@ -127,6 +128,7 @@ func NewNode(raftPort, discoveryPort int, dataDir string, services []fsm.FSMServ
 	}, nil
 }
 
+// Start starts the Node and returns a channel that indicates, that the node has been stopped properly
 func (n *Node) Start() (chan interface{}, error) {
 	n.logger.Println("Starting Node...")
 	// set stopped as false
@@ -200,6 +202,7 @@ func (n *Node) Start() (chan interface{}, error) {
 	return n.stoppedCh, nil
 }
 
+// Stop stops the node and notifies on stopped channel returned in Start
 func (n *Node) Stop() {
 	if atomic.LoadUint32(n.stopped) == 0 {
 		atomic.StoreUint32(n.stopped, 1)
@@ -233,6 +236,7 @@ func (n *Node) Stop() {
 	}
 }
 
+// handleDiscoveredNodes handles the discovered Node additions
 func (n *Node) handleDiscoveredNodes(discoveryChan chan string) {
 	for peer := range discoveryChan {
 		detailsResp, err := GetPeerDetails(peer)
@@ -257,6 +261,8 @@ func (n *Node) handleDiscoveredNodes(discoveryChan chan string) {
 	}
 }
 
+// NotifyJoin triggered when a new Node has been joined to the cluster (discovery only)
+// and capable of joining the Node to the raft cluster
 func (n *Node) NotifyJoin(node *memberlist.Node) {
 	nameParts := strings.Split(node.Name, ":")
 	nodeId, nodePort := nameParts[0], nameParts[1]
@@ -269,6 +275,8 @@ func (n *Node) NotifyJoin(node *memberlist.Node) {
 	}
 }
 
+// NotifyLeave triggered when a Node becomes unavailable after a period of time
+// it will remove the unavailable Node from the Raft cluster
 func (n *Node) NotifyLeave(node *memberlist.Node) {
 	if n.DiscoveryMethod.SupportsNodeAutoRemoval() {
 		nodeId := strings.Split(node.Name, ":")[0]
@@ -284,6 +292,8 @@ func (n *Node) NotifyLeave(node *memberlist.Node) {
 func (n *Node) NotifyUpdate(_ *memberlist.Node) {
 }
 
+// RaftApply is used to apply any new logs to the raft cluster
+// this method does automatic forwarding to Leader Node
 func (n *Node) RaftApply(request interface{}, timeout time.Duration) (interface{}, error) {
 	payload, err := n.Serializer.Serialize(request)
 	if err != nil {

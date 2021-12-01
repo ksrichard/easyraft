@@ -56,7 +56,7 @@ func (i *RoutingFSM) Apply(log *raft.Log) interface{} {
 			fields = append(fields, k)
 		}
 		// routing request to service
-		foundType, err := GetTargetType(i.reqDataTypes, fields)
+		foundType, err := getTargetType(i.reqDataTypes, fields)
 		if err == nil {
 			for typeName, service := range i.reqServiceDataTypes {
 				if strings.EqualFold(fmt.Sprintf("%#v", foundType), typeName) {

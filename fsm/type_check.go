@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-func GetTargetType(types []interface{}, expectedFields []string) (interface{}, error) {
+func getTargetType(types []interface{}, expectedFields []string) (interface{}, error) {
 	var result interface{} = nil
 	for _, i := range types {
 		// get current type fields list

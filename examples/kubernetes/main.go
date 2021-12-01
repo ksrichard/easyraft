@@ -13,7 +13,6 @@ import (
 	"os/signal"
 	"strconv"
 	"syscall"
-	"time"
 )
 
 func main() {
@@ -54,7 +53,7 @@ func main() {
 			MapName: mapName,
 			Key:     key,
 			Value:   value,
-		}, time.Second)
+		}, 0)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
@@ -68,7 +67,7 @@ func main() {
 			fsm.MapGetRequest{
 				MapName: mapName,
 				Key:     key,
-			}, time.Second)
+			}, 0)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
