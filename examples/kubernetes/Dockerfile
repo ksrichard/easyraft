@@ -1,15 +1,5 @@
-FROM golang:1.16-alpine3.12 AS builder
-RUN apk update && apk add --no-cache git
-ENV USER=appuser
-ENV UID=10001
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    "${USER}"
+FROM golang:1.16-alpine3.12
+RUN apk update && apk add --no-cache git curl wget
 WORKDIR /app
 COPY . .
 RUN go mod download

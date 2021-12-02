@@ -36,7 +36,7 @@ func NewKubernetesDiscovery(namespace string, serviceLabels map[string]string, r
 		serviceLabels = make(map[string]string)
 		serviceLabels["svcType"] = defaultK8sDiscoverySvcType
 	}
-	delayTime := time.Duration(rand.Intn(30)+5) * time.Second
+	delayTime := time.Duration(rand.Intn(5)+1) * time.Second
 	return &KubernetesDiscovery{
 		namespace:             namespace,
 		matchingServiceLabels: serviceLabels,

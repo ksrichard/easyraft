@@ -4,7 +4,6 @@ go 1.16
 
 require (
 	github.com/Jille/raft-grpc-transport v1.2.0
-	github.com/gin-gonic/gin v1.7.6
 	github.com/grandcat/zeroconf v1.0.0
 	github.com/hashicorp/go-multierror v1.1.0 // indirect
 	github.com/hashicorp/go-uuid v1.0.1 // indirect

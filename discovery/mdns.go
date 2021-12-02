@@ -24,7 +24,7 @@ type MDNSDiscovery struct {
 
 func NewMDNSDiscovery() DiscoveryMethod {
 	rand.Seed(time.Now().UnixNano())
-	delayTime := time.Duration(rand.Intn(30)+5) * time.Second
+	delayTime := time.Duration(rand.Intn(5)+1) * time.Second
 	return &MDNSDiscovery{
 		delayTime:     delayTime,
 		discoveryChan: make(chan string),
