@@ -77,6 +77,9 @@ Examples
 ---
 Examples can be found in the [examples](https://github.com/ksrichard/easyraft/tree/main/examples/) directory
 
+Build
+---
+To regenerate gRPC code and install dependencies simply run `make install`
 
 TODO
 ---
