@@ -2,11 +2,15 @@ package easyraft
 
 import (
 	"context"
+	"errors"
 	"github.com/ksrichard/easyraft/grpc"
 	ggrpc "google.golang.org/grpc"
 )
 
 func ApplyOnLeader(node *Node, payload []byte) (interface{}, error) {
+	if node.Raft.Leader() == "" {
+		return nil, errors.New("unknown leader")
+	}
 	var opt ggrpc.DialOption = ggrpc.EmptyDialOption{}
 	conn, err := ggrpc.Dial(string(node.Raft.Leader()), ggrpc.WithInsecure(), ggrpc.WithBlock(), opt)
 	if err != nil {
