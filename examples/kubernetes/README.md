@@ -18,4 +18,9 @@ Usage
 4. Get value:
    1. ``curl --location --request GET 'http://localhost:5001/get?map=test&key=somekey'``
 
-Note: you can try scale up/down and check if you are able to put/get data
+Testing
+---
+You can try scale up/down (by setting replicas for example in `deployments.yaml`)
+and check if you are able to put/get data and all the nodes are okay.
+
+**Notet:** It is recommended to use `StatefulSet` as it will nicely scale up/down one-by-one the nodes without any issue.  

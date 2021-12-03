@@ -57,10 +57,11 @@ spec:
   type: LoadBalancer
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: webkvs
 spec:
+  serviceName: webkvs
   selector:
     matchLabels:
       app: webkvs
@@ -70,7 +71,7 @@ spec:
       labels:
         app: webkvs
     spec:
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 120
       containers:
         - name: webkvs
           image: webkvs:latest
